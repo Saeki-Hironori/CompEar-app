@@ -1,14 +1,11 @@
 import PrimaryButton from "@/components/atoms/button/PrimaryButton";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import {
-  Timestamp,
   addDoc,
   collection,
-  getDoc,
   getDocs,
-  onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
@@ -42,7 +39,7 @@ const makers = [
   "final",
 ];
 
-const AllProduct = () => {
+const AllItems = () => {
   const [currentUserUid, setCurrentUserUid] = useState("");
   const [id, setId] = useState(1);
   const router = useRouter();
@@ -93,4 +90,4 @@ const AllProduct = () => {
   );
 };
 
-export default AllProduct;
+export default AllItems;

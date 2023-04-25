@@ -24,13 +24,17 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
+
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         console.log(currentUser);
-        router.push("/AllProduct");
+        router.push("/AllItems");
+      } else {
+        setIsLoading(false);
       }
     });
   }, []);
@@ -71,64 +75,82 @@ const Login = () => {
 
   return (
     <>
-      <Container
-        component="main"
-        maxWidth="xs"
-        sx={{
-          mt: "10vh",
-          p: "30px",
-          border: 2,
-          borderColor: "green",
-          borderRadius: "50px",
-        }}
-      >
-        <CssBaseline />
-        <div>
-          <Avatar sx={{ m: "auto", bgcolor: "green" }}></Avatar>
-          <Typography
-            component="h1"
-            variant="h5"
-            textAlign={"center"}
-            color={"green"}
-          >
-            Login
-          </Typography>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <InputEmail value={email} onChange={handleChangeEmail} />
-          <InputPassword value={password} onChange={handleChangePassword} />
-          <p style={{ color: "red", fontSize: "12px" }}>{error}</p>
-          <Button
-            type="submit"
-            fullWidth
-            variant="outlined"
-            color="success"
-            sx={{ mb: "30px" }}
-            endIcon={<ArrowForwardIcon />}
-          >
-            ログイン
-          </Button>
-        </form>
-        <Button
-          onClick={GoogleLogin}
-          fullWidth
-          variant="outlined"
-          color="success"
-          sx={{ mb: "30px" }}
-          endIcon={<GoogleIcon />}
+      {isLoading ? (
+        <h1
+          style={{
+            fontSize: "18px",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
         >
-          Googleアカウントでログイン
-        </Button>
-        <div style={{ textAlign: "right" }}>
-          新規登録は
-          <Link
-            href="/"
-            style={{ color: "green", textDecoration: "underline" }}
+          読み込み中だよ
+          <br />
+          （ログアウトしないとログイン画面は表示できないよ）
+        </h1>
+      ) : (
+        <>
+          <Container
+            component="main"
+            maxWidth="xs"
+            sx={{
+              mt: "10vh",
+              p: "30px",
+              border: 2,
+              borderColor: "green",
+              borderRadius: "50px",
+            }}
           >
-            こちら
-          </Link>
-        </div>
-      </Container>
+            <CssBaseline />
+            <div>
+              <Avatar sx={{ m: "auto", bgcolor: "green" }}></Avatar>
+              <Typography
+                component="h1"
+                variant="h5"
+                textAlign={"center"}
+                color={"green"}
+              >
+                Login
+              </Typography>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <InputEmail value={email} onChange={handleChangeEmail} />
+              <InputPassword value={password} onChange={handleChangePassword} />
+              <p style={{ color: "red", fontSize: "12px" }}>{error}</p>
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                color="success"
+                sx={{ mb: "30px" }}
+                endIcon={<ArrowForwardIcon />}
+              >
+                ログイン
+              </Button>
+            </form>
+            <Button
+              onClick={GoogleLogin}
+              fullWidth
+              variant="outlined"
+              color="success"
+              sx={{ mb: "30px" }}
+              endIcon={<GoogleIcon />}
+            >
+              Googleアカウントでログイン
+            </Button>
+            <div style={{ textAlign: "right" }}>
+              新規登録は
+              <Link
+                href="/"
+                style={{ color: "green", textDecoration: "underline" }}
+              >
+                こちら
+              </Link>
+            </div>
+          </Container>
+        </>
+      )}
     </>
   );
 };

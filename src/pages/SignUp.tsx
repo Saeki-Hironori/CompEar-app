@@ -24,13 +24,17 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         console.log(currentUser.uid);
-        router.push("/AllProduct");
+        router.push("/AllItems");
+      } else {
+        setIsLoading(false);
       }
     });
   }, []);
@@ -38,9 +42,11 @@ const SignUp = () => {
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
+
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Email:", email);
@@ -80,62 +86,80 @@ const SignUp = () => {
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      sx={{
-        mt: "10vh",
-        p: "30px",
-        border: 2,
-        borderColor: "green",
-        borderRadius: "50px",
-      }}
-    >
-      <CssBaseline />
-      <Avatar sx={{ m: "auto", bgcolor: "green" }}></Avatar>
-      <Typography
-        component="h1"
-        variant="h5"
-        textAlign={"center"}
-        color={"green"}
-      >
-        Sign up
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <InputEmail value={email} onChange={handleChangeEmail} />
-        <InputPassword value={password} onChange={handleChangePassword} />
-        <p style={{ color: "red", fontSize: "12px" }}>{error}</p>
-        <Button
-          type="submit"
-          fullWidth
-          variant="outlined"
-          color="success"
-          sx={{ mb: "30px" }}
-          endIcon={<Fingerprint />}
+    <>
+      {isLoading ? (
+        <h1
+          style={{
+            fontSize: "18px",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
         >
-          新規登録
-        </Button>
-      </form>
-      <Button
-        onClick={GoogleSignUp}
-        fullWidth
-        variant="outlined"
-        color="success"
-        sx={{ mb: "30px" }}
-        endIcon={<GoogleIcon />}
-      >
-        Googleアカウントで登録
-      </Button>
-      <div style={{ textAlign: "right" }}>
-        すでに登録している人は
-        <Link
-          href="/Login"
-          style={{ color: "green", textDecoration: "underline" }}
+          読み込み中だよ
+          <br />
+          （ログアウトしないと登録画面は表示できないよ）
+        </h1>
+      ) : (
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{
+            mt: "10vh",
+            p: "30px",
+            border: 2,
+            borderColor: "green",
+            borderRadius: "50px",
+          }}
         >
-          ログイン
-        </Link>
-      </div>
-    </Container>
+          <CssBaseline />
+          <Avatar sx={{ m: "auto", bgcolor: "green" }}></Avatar>
+          <Typography
+            component="h1"
+            variant="h5"
+            textAlign={"center"}
+            color={"green"}
+          >
+            Sign up
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <InputEmail value={email} onChange={handleChangeEmail} />
+            <InputPassword value={password} onChange={handleChangePassword} />
+            <p style={{ color: "red", fontSize: "12px" }}>{error}</p>
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              color="success"
+              sx={{ mb: "30px" }}
+              endIcon={<Fingerprint />}
+            >
+              新規登録
+            </Button>
+          </form>
+          <Button
+            onClick={GoogleSignUp}
+            fullWidth
+            variant="outlined"
+            color="success"
+            sx={{ mb: "30px" }}
+            endIcon={<GoogleIcon />}
+          >
+            Googleアカウントで登録
+          </Button>
+          <div style={{ textAlign: "right" }}>
+            すでに登録している人は
+            <Link
+              href="/Login"
+              style={{ color: "green", textDecoration: "underline" }}
+            >
+              ログイン
+            </Link>
+          </div>
+        </Container>
+      )}
+    </>
   );
 };
 
