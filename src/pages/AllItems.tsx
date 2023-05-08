@@ -1,6 +1,7 @@
 import PrimaryButton from "@/components/atoms/button/PrimaryButton";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
+import { Box } from "@mui/material";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   addDoc,
