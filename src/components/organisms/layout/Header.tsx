@@ -18,9 +18,7 @@ const Header = () => {
       .then(() => {
         router.push("/Login");
       })
-      .catch((error) => {
-        // エラー起きんな！
-      });
+      .catch((error) => {});
   };
 
   return (

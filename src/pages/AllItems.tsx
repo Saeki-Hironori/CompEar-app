@@ -1,22 +1,25 @@
+import React, { useCallback, useEffect, useState } from "react";
 import PrimaryButton from "@/components/atoms/button/PrimaryButton";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
-import { Box } from "@mui/material";
+import { Grid, Box, Modal, Typography } from "@mui/material";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   addDoc,
   collection,
   getDocs,
+  limit,
+  orderBy,
+  query,
   serverTimestamp,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import useAllItems from "../hooks/useAllItems";
+import ItemCard from "@/components/organisms/item/ItemCard";
+import useSelectItem from "@/hooks/useSelectItem";
+import Graph from "@/components/molecules/Graph";
+import { Item } from "@/types/Item";
 
-const freq = [
-  20, 25, 32, 40, 50, 63, 79, 100, 126, 158, 200, 251, 316, 398, 501, 631, 794,
-  1000, 1259, 1585, 1995, 2512, 3162, 3981, 5012, 6310, 7943, 10000, 12589,
-  15849, 19953,
-];
 const originGain = [
   6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
   3.31225281, 3.35750401, 4.08871388, 3.27489612, 1.97762444, 0.41068456,
@@ -26,8 +29,8 @@ const originGain = [
   -7.59936187,
 ];
 
-const gain = originGain.map((value) => value + Math.random() * 4 - 2);
-const roundGain = gain.map((num) => Math.round(num * 100) / 100);
+const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
+const roundGain = randomGain.map((num) => Math.round(num * 100) / 100);
 const makers = [
   "SONY",
   "Apple",
@@ -40,12 +43,33 @@ const makers = [
   "final",
 ];
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "400px",
+  backgroundColor: "white",
+  border: "2px solid rgb(0, 0, 0)",
+  padding: "32px",
+};
+
 const AllItems = () => {
   const [currentUserUid, setCurrentUserUid] = useState("");
-  const [id, setId] = useState(1);
+  const [selectId, setSelectId] = useState<number>();
+  const [selectMaker, setSelectMaker] = useState("");
+  const [open, setOpen] = useState(false);
+  const {
+    onSelectItem,
+    selectedItem,
+  }: { onSelectItem: any; selectedItem: Item | null } = useSelectItem();
+  const { getItems, items, loading } = useAllItems();
   const router = useRouter();
 
+  const itemsRef = collection(db, "items");
+
   useEffect(() => {
+    getItems();
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setCurrentUserUid(currentUser.uid);
@@ -57,19 +81,51 @@ const AllItems = () => {
   }, []);
 
   const addItem = async () => {
-    const data = await getDocs(collection(db, "items"));
-    console.log(
-      data.docs.forEach((res) => {
-        console.log({ res });
-      })
-    );
-    addDoc(collection(db, "items"), {
-      id: id,
+    const q = query(itemsRef, orderBy("addedAt", "desc"), limit(1));
+    const data = await getDocs(q);
+    data.forEach((doc) => {
+      addDoc(itemsRef, {
+        id: doc.data().id + 1,
+        maker: makers[Math.floor(Math.random() * makers.length)],
+        gain: roundGain,
+        addedAt: serverTimestamp(),
+      }).then((e) => {
+        console.log(`add docId => "${e.id}"`);
+      });
+    });
+    // ドキュメントが無いときに上では動作しないので、データ有無で場合分けしたい
+
+    // await addDoc(itemsRef, {
+    //   id: 1,
+    //   maker: makers[Math.floor(Math.random() * makers.length)],
+    //   gain: roundGain,
+    //   addedAt: serverTimestamp(),
+    // });
+  };
+
+  const addFirstItem = async () => {
+    addDoc(itemsRef, {
+      id: 1,
       maker: makers[Math.floor(Math.random() * makers.length)],
       gain: roundGain,
       addedAt: serverTimestamp(),
+    }).then((e) => {
+      console.log(`add docId => "${e.id}"`);
+      getItems();
     });
-    setId(id + 1);
+  };
+
+  const onClickItem = useCallback(
+    (id: number, maker: string) => {
+      onSelectItem({ id, items });
+      setOpen(true);
+      console.log(selectedItem);
+    },
+    [open, items, onSelectItem]
+  );
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -80,11 +136,58 @@ const AllItems = () => {
           <div>
             <h1>製品一覧だよ</h1>
           </div>
-          <PrimaryButton onClick={addItem}>製品追加ボタン</PrimaryButton>
+
+          {/* <ItemCard2
+              imageUrl={`https://source.unsplash.com/random?${1}`}
+              id={1}
+              maker={"AKG"}
+              addedAt={null}
+              onClick={onClickItem}
+            /> */}
+          <Grid container spacing={2}>
+            {items.map((item) => (
+              <Grid item xs={3} key={item.id} sx={{ minWidth: "250px" }}>
+                <ItemCard
+                  imageUrl={`https://source.unsplash.com/random?${item.id}`}
+                  id={item.id}
+                  maker={item.maker}
+                  addedAt={item.addedAt ? item.addedAt.toDate() : null}
+                  onClick={onClickItem}
+                />
+              </Grid>
+            ))}
+          </Grid>
+
+          <PrimaryButton onClick={() => addItem()}>
+            製品追加ボタン
+          </PrimaryButton>
+          <br />
+          <PrimaryButton onClick={() => addFirstItem()}>
+            最初の一個追加ボタン
+          </PrimaryButton>
+
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {`${selectedItem?.id}. ${selectMaker}`}
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                なんか説明書く
+              </Typography>
+              <Graph />
+            </Box>
+          </Modal>
         </>
       ) : (
         <>
-          <h1>ログインしてね</h1>
+          <h1>
+            ユーザー情報読み込み中（ログインしてない場合はログイン画面に戻ってね）
+          </h1>
         </>
       )}
     </>
