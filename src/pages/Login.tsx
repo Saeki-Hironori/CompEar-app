@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import GoogleIcon from "@mui/icons-material/Google";
 import Link from "next/link";
 import {
   UserCredential,
@@ -18,7 +19,6 @@ import { useRouter } from "next/router";
 import InputEmail from "@/components/atoms/button/InputEmail";
 import InputPassword from "@/components/atoms/button/InputPassword";
 import { auth, provider } from "@/components/firebase/firebase";
-import GoogleIcon from "@mui/icons-material/Google";
 
 const Login = () => {
   const [email, setEmail] = useState("");

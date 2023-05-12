@@ -1,11 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { Item } from "../types/Item";
-import useMessage from "./useMessage";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/components/firebase/firebase";
 
 const useAllItems = () => {
-  const { showMessage } = useMessage();
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<Array<Item>>([]);
 

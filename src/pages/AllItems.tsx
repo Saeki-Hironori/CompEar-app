@@ -1,47 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
-import PrimaryButton from "@/components/atoms/button/PrimaryButton";
+import { Box, Grid, IconButton, Modal, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
-import { Grid, Box, Modal, Typography } from "@mui/material";
+import ItemCard from "@/components/organisms/item/ItemCard";
+import Graph from "@/components/molecules/Graph";
 import { onAuthStateChanged } from "firebase/auth";
 import {
-  addDoc,
   collection,
+  deleteDoc,
   getDocs,
-  limit,
-  orderBy,
   query,
-  serverTimestamp,
+  where,
+  doc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import useAllItems from "../hooks/useAllItems";
-import ItemCard from "@/components/organisms/item/ItemCard";
+import useAllItems from "@/hooks/useAllItems";
 import useSelectItem from "@/hooks/useSelectItem";
-import Graph from "@/components/molecules/Graph";
+
 import { Item } from "@/types/Item";
-
-const originGain = [
-  6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
-  3.31225281, 3.35750401, 4.08871388, 3.27489612, 1.97762444, 0.41068456,
-  -0.48917721, -0.51069791, 1.01681708, 2.11055156, 2.61937063, 0.35606997,
-  -2.62518341, -4.44702821, -6.89707051, -7.09881315, 0.26507495, -0.09770863,
-  -0.28147342, -1.27166011, -0.45185329, -3.55830526, 1.14649245, -5.91527689,
-  -7.59936187,
-];
-
-const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
-const roundGain = randomGain.map((num) => Math.round(num * 100) / 100);
-const makers = [
-  "SONY",
-  "Apple",
-  "AKG",
-  "SENNHEISER",
-  "BOSE",
-  "audio-technica",
-  "SHURE",
-  "JBL",
-  "final",
-];
+import Footer from "@/components/organisms/layout/Footer";
 
 const style = {
   position: "absolute",
@@ -57,8 +35,6 @@ const style = {
 
 const AllItems = () => {
   const [currentUserUid, setCurrentUserUid] = useState("");
-  const [selectId, setSelectId] = useState<number>();
-  const [selectMaker, setSelectMaker] = useState("");
   const [open, setOpen] = useState(false);
   const {
     onSelectItem,
@@ -80,38 +56,12 @@ const AllItems = () => {
     });
   }, []);
 
-  const addItem = async () => {
-    const q = query(itemsRef, orderBy("addedAt", "desc"), limit(1));
-    const data = await getDocs(q);
-    data.forEach((doc) => {
-      addDoc(itemsRef, {
-        id: doc.data().id + 1,
-        maker: makers[Math.floor(Math.random() * makers.length)],
-        gain: roundGain,
-        addedAt: serverTimestamp(),
-      }).then((e) => {
-        console.log(`add docId => "${e.id}"`);
-      });
-    });
-    // ドキュメントが無いときに上では動作しないので、データ有無で場合分けしたい
-
-    // await addDoc(itemsRef, {
-    //   id: 1,
-    //   maker: makers[Math.floor(Math.random() * makers.length)],
-    //   gain: roundGain,
-    //   addedAt: serverTimestamp(),
-    // });
-  };
-
-  const addFirstItem = async () => {
-    addDoc(itemsRef, {
-      id: 1,
-      maker: makers[Math.floor(Math.random() * makers.length)],
-      gain: roundGain,
-      addedAt: serverTimestamp(),
-    }).then((e) => {
-      console.log(`add docId => "${e.id}"`);
-      getItems();
+  const deleteItem = async () => {
+    const q = query(itemsRef, where("id", "==", selectedItem?.id));
+    const deleteData = await getDocs(q);
+    deleteData.forEach((data) => {
+      console.log(data.id);
+      deleteDoc(doc(db, "items", data.id));
     });
   };
 
@@ -119,7 +69,6 @@ const AllItems = () => {
     (id: number) => {
       onSelectItem({ id, items });
       setOpen(true);
-      console.log(selectedItem);
     },
     [open, items, onSelectItem]
   );
@@ -144,7 +93,7 @@ const AllItems = () => {
             {items.map((item) => (
               <Grid item xs={2} key={item.id} sx={{ minWidth: "250px" }}>
                 <ItemCard
-                  imageUrl={`https://source.unsplash.com/random?${item.id}`}
+                  imageUrl={`https://source.unsplash.com/random?${item.maker}`}
                   id={item.id}
                   maker={item.maker}
                   addedAt={item.addedAt ? item.addedAt.toDate() : null}
@@ -153,15 +102,6 @@ const AllItems = () => {
               </Grid>
             ))}
           </Grid>
-
-          <PrimaryButton onClick={() => addItem()}>
-            製品追加ボタン
-          </PrimaryButton>
-          <br />
-          <PrimaryButton onClick={() => addFirstItem()}>
-            最初の一個追加ボタン
-          </PrimaryButton>
-
           <Modal
             open={open}
             onClose={handleClose}
@@ -175,15 +115,21 @@ const AllItems = () => {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 （ここに説明のデータ追加してもいいかも）
               </Typography>
-              <Graph gain={selectedItem!.gain} />
+              <Graph gain={selectedItem?.gain} />
+              <div style={{ textAlign: "right" }}>
+                <IconButton sx={{ color: "red" }} onClick={() => deleteItem()}>
+                  <DeleteIcon fontSize="inherit" />
+                </IconButton>
+              </div>
             </Box>
           </Modal>
+          <Footer />
         </>
       ) : (
         <>
-          <h1>
+          <h3>
             ユーザー情報読み込み中（ログインしてない場合はログイン画面に戻ってね）
-          </h1>
+          </h3>
         </>
       )}
     </>

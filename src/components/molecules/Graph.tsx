@@ -32,7 +32,7 @@ const freq = [
 ];
 
 type Props = {
-  gain: number[];
+  gain: number[] | undefined;
 };
 
 const Graph = (props: Props) => {
@@ -69,7 +69,7 @@ const Graph = (props: Props) => {
     datasets: [
       {
         label: "データ",
-        data: gain,
+        data: gain!,
         borderColor: "rgb(0, 250, 0)",
         backgroundColor: "rgba(0, 200, 0, 0.5)",
       },

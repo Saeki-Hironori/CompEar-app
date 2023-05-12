@@ -1,5 +1,5 @@
-import { Item } from "@/types/Item";
 import React, { useCallback, useState } from "react";
+import { Item } from "@/types/Item";
 
 type Props = {
   id: number;
