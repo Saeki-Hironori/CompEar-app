@@ -48,10 +48,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "400px",
+  width: "800px",
   backgroundColor: "white",
   border: "2px solid rgb(0, 0, 0)",
   padding: "32px",
+  textAlign: "center",
 };
 
 const AllItems = () => {
@@ -73,7 +74,6 @@ const AllItems = () => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setCurrentUserUid(currentUser.uid);
-        // console.log(currentUser);
       } else {
         router.push("/Login");
       }
@@ -116,7 +116,7 @@ const AllItems = () => {
   };
 
   const onClickItem = useCallback(
-    (id: number, maker: string) => {
+    (id: number) => {
       onSelectItem({ id, items });
       setOpen(true);
       console.log(selectedItem);
@@ -133,12 +133,16 @@ const AllItems = () => {
       {currentUserUid ? (
         <>
           <Header />
-          <div>
-            <h1>製品一覧だよ</h1>
-          </div>
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={2}
+            mt={1}
+            mb={3}
+            alignItems="center"
+            justifyContent="center"
+          >
             {items.map((item) => (
-              <Grid item xs={3} key={item.id} sx={{ minWidth: "250px" }}>
+              <Grid item xs={2} key={item.id} sx={{ minWidth: "250px" }}>
                 <ItemCard
                   imageUrl={`https://source.unsplash.com/random?${item.id}`}
                   id={item.id}
@@ -171,7 +175,7 @@ const AllItems = () => {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 （ここに説明のデータ追加してもいいかも）
               </Typography>
-              <Graph />
+              <Graph gain={selectedItem!.gain} />
             </Box>
           </Modal>
         </>

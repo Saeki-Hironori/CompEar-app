@@ -5,6 +5,8 @@ import {
   LinearScale,
   LogarithmicScale,
   PointElement,
+  ChartOptions,
+  ChartData,
   LineElement,
   Title,
   Tooltip,
@@ -29,26 +31,20 @@ const freq = [
   15849, 19953,
 ];
 
-const originGain = [
-  6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
-  3.31225281, 3.35750401, 4.08871388, 3.27489612, 1.97762444, 0.41068456,
-  -0.48917721, -0.51069791, 1.01681708, 2.11055156, 2.61937063, 0.35606997,
-  -2.62518341, -4.44702821, -6.89707051, -7.09881315, 0.26507495, -0.09770863,
-  -0.28147342, -1.27166011, -0.45185329, -3.55830526, 1.14649245, -5.91527689,
-  -7.59936187,
-];
+type Props = {
+  gain: number[];
+};
 
-const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
-const roundGain = randomGain.map((num) => Math.round(num * 100) / 100);
+const Graph = (props: Props) => {
+  const { gain } = props;
 
-const Graph = () => {
-  const options = {
-    maintainAspectRatio: false,
-    responsive: false,
+  const options: ChartOptions<"line"> = {
+    maintainAspectRatio: true,
+    responsive: true,
     plugins: {
       title: {
         display: true,
-        text: "グラフタイトル",
+        text: "周波数特性",
       },
     },
     scales: {
@@ -68,21 +64,23 @@ const Graph = () => {
   };
 
   const labels = freq;
-  const graphData = {
+  const graphData: ChartData<"line"> = {
     labels,
     datasets: [
       {
-        label: "データ1",
-        data: originGain,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        label: "データ",
+        data: gain,
+        borderColor: "rgb(0, 250, 0)",
+        backgroundColor: "rgba(0, 200, 0, 0.5)",
       },
     ],
   };
 
   return (
     <>
-      <Line data={graphData} options={options} height={200} />
+      <div style={{ width: "full" }}>
+        <Line data={graphData} options={options} />
+      </div>
     </>
   );
 };

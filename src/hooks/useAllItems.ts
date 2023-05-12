@@ -13,8 +13,8 @@ const useAllItems = () => {
 
   const getItems = useCallback(async () => {
     setLoading(true);
-    const querySnapshot = await getDocs(itemsRef);
     const newArray: Item[] = [];
+    const querySnapshot = await getDocs(itemsRef);
     querySnapshot.forEach((doc) => {
       const array = doc.data(); //firestoreのデータには型付けれない？
       newArray.push(array);
