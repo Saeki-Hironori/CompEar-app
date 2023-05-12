@@ -136,14 +136,6 @@ const AllItems = () => {
           <div>
             <h1>製品一覧だよ</h1>
           </div>
-
-          {/* <ItemCard2
-              imageUrl={`https://source.unsplash.com/random?${1}`}
-              id={1}
-              maker={"AKG"}
-              addedAt={null}
-              onClick={onClickItem}
-            /> */}
           <Grid container spacing={2}>
             {items.map((item) => (
               <Grid item xs={3} key={item.id} sx={{ minWidth: "250px" }}>
@@ -174,10 +166,10 @@ const AllItems = () => {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                {`${selectedItem?.id}. ${selectMaker}`}
+                {`${selectedItem?.id}. ${selectedItem?.maker}`}
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                なんか説明書く
+                （ここに説明のデータ追加してもいいかも）
               </Typography>
               <Graph />
             </Box>

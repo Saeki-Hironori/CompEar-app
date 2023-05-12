@@ -1,9 +1,9 @@
-import React, { memo } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import { format } from "path";
 
 const freq = [
   20, 25, 32, 40, 50, 63, 79, 100, 126, 158, 200, 251, 316, 398, 501, 631, 794,
@@ -22,6 +22,8 @@ type Props = {
 const ItemCard = (props: Props) => {
   const { id, maker, addedAt, imageUrl, onClick } = props;
 
+  const date = addedAt?.toLocaleString();
+
   return (
     <Card>
       <CardActionArea onClick={() => onClick(id, maker)}>
@@ -36,7 +38,7 @@ const ItemCard = (props: Props) => {
             {id}. {maker}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {`${addedAt}`}
+            {`${date}`}
           </Typography>
         </CardContent>
       </CardActionArea>
