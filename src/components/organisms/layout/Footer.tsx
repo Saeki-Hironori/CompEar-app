@@ -1,6 +1,6 @@
 import { db } from "@/components/firebase/firebase";
-import useAllItems from "@/hooks/useAllItems";
-import { AppBar, Box, Button, Toolbar } from "@mui/material";
+import { AppBar, Button, Toolbar, IconButton, Box } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   addDoc,
   collection,
@@ -69,18 +69,22 @@ const Footer = () => {
   return (
     <AppBar
       position="sticky"
-      color="primary"
       sx={{ top: "auto", bottom: 0, backgroundColor: "green" }}
     >
-      <Toolbar>
+      <Toolbar sx={{ display: "flex" }}>
         <Button
           variant="outlined"
           color="inherit"
           onClick={() => addItem()}
           sx={{ margin: "10px 10px", color: "white" }}
         >
-          製品追加ボタン
+          製品追加
         </Button>
+        <Box>
+          <IconButton>
+            <PlayArrowIcon />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );

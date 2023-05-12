@@ -85,7 +85,7 @@ const AllItems = () => {
           <Grid
             container
             spacing={2}
-            mt={1}
+            mt={0}
             mb={3}
             alignItems="center"
             justifyContent="center"
