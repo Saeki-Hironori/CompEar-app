@@ -1,5 +1,16 @@
+import React, { useState } from "react";
 import { db } from "@/components/firebase/firebase";
-import { AppBar, Button, Toolbar, IconButton, Box } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Toolbar,
+  IconButton,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   addDoc,
@@ -10,7 +21,6 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import React from "react";
 
 const originGain = [
   6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
@@ -35,14 +45,15 @@ const makers = [
 ];
 
 const Footer = () => {
+  const [age, setAge] = useState("");
   const itemsRef = collection(db, "items");
 
   const addItem = async () => {
-    //   追加日時が最も新しいデータを取得
+    // 追加日時が最も新しいデータを取得
     const q = query(itemsRef, orderBy("addedAt", "desc"), limit(1));
     const latestData = await getDocs(q);
-    // データが無い場合はdataが空になりforEachが動かないので、data.docs.lengthが0かどうかで場合分け
-    if (latestData.docs.length >= 1) {
+    // データが無い場合はlatestDataが空になりforEach？が動かないので、latestData.docs.lengthが0かどうかで場合分け
+    if (latestData.docs.length !== 0) {
       latestData.forEach((data) => {
         addDoc(itemsRef, {
           // 最新データのidに+1
@@ -66,20 +77,58 @@ const Footer = () => {
     }
   };
 
+  const handleChange = (event: any) => {
+    setAge(event.target.value as string);
+  };
+
   return (
     <AppBar
       position="sticky"
-      sx={{ top: "auto", bottom: 0, backgroundColor: "green" }}
+      sx={{
+        top: "auto",
+        bottom: 0,
+        backgroundColor: "green",
+        height: "100px",
+        display: "grid",
+        alignItems: "center",
+      }}
     >
       <Toolbar sx={{ display: "flex" }}>
         <Button
           variant="outlined"
           color="inherit"
           onClick={() => addItem()}
-          sx={{ margin: "10px 10px", color: "white" }}
+          sx={{ color: "white", flex: "1" }}
         >
           製品追加
         </Button>
+        <Box sx={{ flex: "1" }}></Box>
+        <Box sx={{ minWidth: 200 }}>
+          <FormControl fullWidth>
+            <InputLabel sx={{ fontFamily: "bold" }}>Item1</InputLabel>
+            <Select value={age} label="Item1" onChange={handleChange}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ fontSize: "48px", color: "black", m: "0 20px" }}>-</Box>
+        <Box sx={{ minWidth: 200 }}>
+          <FormControl fullWidth>
+            <InputLabel sx={{ fontFamily: "bold" }}>Item2</InputLabel>
+            <Select value={age} label="Item2" onChange={handleChange}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ flex: "2" }}></Box>
         <Box>
           <IconButton>
             <PlayArrowIcon />

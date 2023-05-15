@@ -40,7 +40,7 @@ const AllItems = () => {
     onSelectItem,
     selectedItem,
   }: { onSelectItem: any; selectedItem: Item | null } = useSelectItem();
-  const { getItems, items, loading } = useAllItems();
+  const { getItems, items, setItems, loading } = useAllItems();
   const router = useRouter();
 
   const itemsRef = collection(db, "items");
