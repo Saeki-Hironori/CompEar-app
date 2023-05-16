@@ -4,8 +4,14 @@ import { useRouter } from "next/router";
 import useAllItems from "@/hooks/useAllItems";
 import useSelectItem from "@/hooks/useSelectItem";
 import { itemsState } from "@/components/atoms/recoil/items-state";
-import { allItemsState } from "@/components/atoms/recoil/allItems-state";
-import { Box, Grid, IconButton, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Modal,
+  Typography,
+  Button,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
@@ -20,9 +26,11 @@ import {
   where,
   doc,
 } from "firebase/firestore";
-
 import { Item } from "@/types/Item";
 import Footer from "@/components/organisms/layout/Footer";
+import MadeModal from "@/components/organisms/layout/MadeModal";
+import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
+import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
 
 const style = {
   position: "absolute",
@@ -38,7 +46,8 @@ const style = {
 
 const AllItems = () => {
   const [items, setItems] = useRecoilState<Item[]>(itemsState);
-  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
+  const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
+  const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
   const [currentUserUid, setCurrentUserUid] = useState("");
   const [open, setOpen] = useState(false);
   const {
@@ -52,7 +61,6 @@ const AllItems = () => {
 
   useEffect(() => {
     getAllItems();
-    setItems(allItems);
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setCurrentUserUid(currentUser.uid);
@@ -83,6 +91,13 @@ const AllItems = () => {
     setOpen(false);
   };
 
+  const handleSetItem1Button = () => {
+    setFooterItem1(selectedItem!);
+  };
+  const handleSetItem2Button = () => {
+    setFooterItem2(selectedItem!);
+  };
+
   return (
     <>
       {currentUserUid ? (
@@ -108,27 +123,7 @@ const AllItems = () => {
               </Grid>
             ))}
           </Grid>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                {`${selectedItem?.id}. ${selectedItem?.maker}`}
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                （ここに説明のデータ追加してもいいかも）
-              </Typography>
-              <Graph gain={selectedItem?.gain} />
-              <div style={{ textAlign: "right", marginTop: "20px" }}>
-                <IconButton sx={{ color: "red" }} onClick={() => deleteItem()}>
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
-              </div>
-            </Box>
-          </Modal>
+          <MadeModal gain={selectedItem?.gain} open={open} setOpen={setOpen} />
           <Footer />
         </>
       ) : (

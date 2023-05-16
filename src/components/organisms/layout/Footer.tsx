@@ -26,6 +26,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { Item } from "@/types/Item";
+import useSelectItem from "@/hooks/useSelectItem";
 
 const originGain = [
   6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
@@ -51,8 +52,9 @@ const Footer = () => {
   const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+  const { selectedItem }: { selectedItem: Item | null } = useSelectItem();
 
-  const [item1, setItem1] = useState<number>(0);
+  const [item1, setItem1] = useState<any>(0);
   const [item2, setItem2] = useState<number>(0);
 
   const itemsRef = collection(db, "items");
@@ -85,6 +87,7 @@ const Footer = () => {
         addedAt: serverTimestamp(),
       }).then((e) => {
         console.log(`add docId => "${e.id}"`);
+        console.log(e);
       });
     }
   };
@@ -99,6 +102,17 @@ const Footer = () => {
     if (e.target.value === 0) {
       setFooterItem2(defaultValue);
     }
+  };
+
+  const handleClickStart = () => {
+    const result: number[] = [];
+    for (let i = 0; i < footerItem1.gain.length; i++) {
+      result.push(footerItem2.gain[i] - footerItem1.gain[i]);
+    }
+    const compareGain = result.map((num) => {
+      return Math.round(num * 100) / 100;
+    });
+    console.log(compareGain);
   };
 
   return (
@@ -125,9 +139,9 @@ const Footer = () => {
         <Box sx={{ flex: "1" }}></Box>
         <Box sx={{ minWidth: 200, flex: "1" }}>
           <FormControl fullWidth>
-            <InputLabel sx={{ fontFamily: "bold" }}>Item1</InputLabel>
+            <InputLabel sx={{ fontFamily: "bold" }}>Item1(Using)</InputLabel>
             <Select
-              value={footerItem1.id}
+              value={footerItem1?.id}
               label="Item1"
               onChange={handleItem1Change}
             >
@@ -138,20 +152,22 @@ const Footer = () => {
                 <MenuItem
                   value={item.id}
                   key={item.id}
-                  onClick={() => setFooterItem1(item)}
+                  onClick={() => {
+                    setFooterItem1(item);
+                  }}
                 >{`${item.id}. ${item.maker}`}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </Box>
-        <IconButton size={"large"}>
+        <IconButton onClick={handleClickStart} size={"large"}>
           <StartIcon sx={{ fontSize: "48px" }} />
         </IconButton>
         <Box sx={{ minWidth: 200, flex: "1" }}>
           <FormControl fullWidth>
-            <InputLabel sx={{ fontFamily: "bold" }}>Item2</InputLabel>
+            <InputLabel sx={{ fontFamily: "bold" }}>Item2(Target)</InputLabel>
             <Select
-              value={footerItem2.id}
+              value={footerItem2?.id}
               label="Item2"
               onChange={handleItem2Change}
             >

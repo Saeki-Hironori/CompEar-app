@@ -52,8 +52,7 @@ const Header = () => {
 
   const searchMaker = async (str: string) => {
     if (str === "" || str === "---All---") {
-      const searchedItems = allItems;
-      setItems(searchedItems);
+      setItems(allItems);
     } else {
       const searchedItems = allItems.filter((item) => {
         return item.maker === str;
@@ -94,10 +93,12 @@ const Header = () => {
           <Autocomplete
             value={value}
             onChange={(event: any, newValue) => {
+              // console.log(newValue);
               setValue(newValue);
             }}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
+              // console.log(newInputValue);
               setInputValue(newInputValue);
             }}
             onKeyDown={handleInputKeyDown}

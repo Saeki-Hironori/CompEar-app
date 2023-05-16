@@ -4,10 +4,12 @@ import { allItemsState } from "@/components/atoms/recoil/allItems-state";
 import { Item } from "../types/Item";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/components/firebase/firebase";
+import { itemsState } from "@/components/atoms/recoil/items-state";
 
 const useAllItems = () => {
   const [loading, setLoading] = useState(true);
   const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
+  const [items, setItems] = useRecoilState<Item[]>(itemsState);
 
   const itemsRef = collection(db, "items");
 
@@ -22,6 +24,7 @@ const useAllItems = () => {
     });
     newArray.sort((a, b) => a.id - b.id);
     setAllItems(newArray);
+    setItems(newArray);
   }, []);
 
   return { getAllItems, loading, setLoading };
