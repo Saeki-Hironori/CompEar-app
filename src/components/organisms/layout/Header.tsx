@@ -15,10 +15,12 @@ import {
   TextField,
   Toolbar,
 } from "@mui/material";
-import useAllItems from "@/hooks/useAllItems";
 import { Item } from "@/types/Item";
+import useAllItems from "@/hooks/useAllItems";
+import { allItemsState } from "@/components/atoms/recoil/allItems-state";
 
 const makers = [
+  "---All---",
   "SONY",
   "Apple",
   "AKG",
@@ -32,17 +34,13 @@ const makers = [
 
 const Header = () => {
   const [items, setItems] = useRecoilState<Array<Item>>(itemsState);
+  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
 
-  const router = useRouter();
-  const user = auth.currentUser;
   const [value, setValue] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
 
-  const { getItems } = useAllItems();
-
-  useEffect(() => {
-    getItems();
-  }, []);
+  const router = useRouter();
+  const user = auth.currentUser;
 
   const handleLogout = () => {
     signOut(auth)
@@ -52,26 +50,30 @@ const Header = () => {
       .catch((error) => {});
   };
 
-  const searchMaker = (str: string) => {
-    console.log(items);
-    const searchedItems = items.filter((item) => {
-      return item.maker === str;
-    });
-    console.log(searchedItems);
-    setItems(searchedItems);
+  const searchMaker = async (str: string) => {
+    if (str === "" || str === "---All---") {
+      const searchedItems = allItems;
+      setItems(searchedItems);
+    } else {
+      const searchedItems = allItems.filter((item) => {
+        return item.maker === str;
+      });
+      // console.log(searchedItems);
+      setItems(searchedItems);
+    }
+    setValue(null);
+    setInputValue("");
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
     e.preventDefault();
     if (value) {
-      console.log(`Valueは"${value}"`);
+      // console.log(`Valueは${value}`);
       searchMaker(value);
-      setValue(null);
     } else {
-      console.log(`inputValueは${inputValue}`);
+      // console.log(`inputValueは${inputValue}`);
       searchMaker(inputValue);
-      setInputValue("");
     }
   };
 
@@ -101,7 +103,7 @@ const Header = () => {
             onKeyDown={handleInputKeyDown}
             options={makers}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Maker" />}
+            renderInput={(params) => <TextField {...params} label="All" />}
           />
         </FormControl>
         <Box sx={{ flex: "1" }}></Box>

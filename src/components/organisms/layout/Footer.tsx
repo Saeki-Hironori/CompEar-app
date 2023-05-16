@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { db } from "@/components/firebase/firebase";
+import { useRecoilState } from "recoil";
+import { allItemsState } from "@/components/atoms/recoil/allItems-state";
+import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
+import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
 import {
   AppBar,
   Button,
@@ -11,7 +15,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StartIcon from "@mui/icons-material/Start";
 import {
   addDoc,
   collection,
@@ -21,6 +25,7 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
+import { Item } from "@/types/Item";
 
 const originGain = [
   6.78528297, 6.36317576, 6.619082, 6.2277798, 5.58017256, 4.39759436,
@@ -30,8 +35,6 @@ const originGain = [
   -0.28147342, -1.27166011, -0.45185329, -3.55830526, 1.14649245, -5.91527689,
   -7.59936187,
 ];
-const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
-const roundGain = randomGain.map((num) => Math.round(num * 100) / 100);
 const makers = [
   "SONY",
   "Apple",
@@ -45,10 +48,19 @@ const makers = [
 ];
 
 const Footer = () => {
-  const [age, setAge] = useState("");
+  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
+  const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
+  const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+
+  const [item1, setItem1] = useState<number>(0);
+  const [item2, setItem2] = useState<number>(0);
+
   const itemsRef = collection(db, "items");
+  const defaultValue = { id: 0, maker: "NONE", gain: [0] };
 
   const addItem = async () => {
+    const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
+    const roundGain = randomGain.map((num) => Math.round(num * 100) / 100);
     // 追加日時が最も新しいデータを取得
     const q = query(itemsRef, orderBy("addedAt", "desc"), limit(1));
     const latestData = await getDocs(q);
@@ -77,8 +89,16 @@ const Footer = () => {
     }
   };
 
-  const handleChange = (event: any) => {
-    setAge(event.target.value as string);
+  const handleItem1Change = (e: any) => {
+    if (e.target.value === 0) {
+      setFooterItem1(defaultValue);
+    }
+  };
+
+  const handleItem2Change = (e: any) => {
+    if (e.target.value === 0) {
+      setFooterItem2(defaultValue);
+    }
   };
 
   return (
@@ -97,43 +117,58 @@ const Footer = () => {
         <Button
           variant="outlined"
           color="inherit"
-          onClick={() => addItem()}
+          onClick={addItem}
           sx={{ color: "white", flex: "1" }}
         >
           製品追加
         </Button>
         <Box sx={{ flex: "1" }}></Box>
-        <Box sx={{ minWidth: 200 }}>
+        <Box sx={{ minWidth: 200, flex: "1" }}>
           <FormControl fullWidth>
             <InputLabel sx={{ fontFamily: "bold" }}>Item1</InputLabel>
-            <Select value={age} label="Item1" onChange={handleChange}>
-              <MenuItem value="">
+            <Select
+              value={footerItem1.id}
+              label="Item1"
+              onChange={handleItem1Change}
+            >
+              <MenuItem value={0}>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
+              {allItems.map((item) => (
+                <MenuItem
+                  value={item.id}
+                  key={item.id}
+                  onClick={() => setFooterItem1(item)}
+                >{`${item.id}. ${item.maker}`}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ fontSize: "48px", color: "black", m: "0 20px" }}>-</Box>
-        <Box sx={{ minWidth: 200 }}>
+        <IconButton size={"large"}>
+          <StartIcon sx={{ fontSize: "48px" }} />
+        </IconButton>
+        <Box sx={{ minWidth: 200, flex: "1" }}>
           <FormControl fullWidth>
             <InputLabel sx={{ fontFamily: "bold" }}>Item2</InputLabel>
-            <Select value={age} label="Item2" onChange={handleChange}>
-              <MenuItem value="">
+            <Select
+              value={footerItem2.id}
+              label="Item2"
+              onChange={handleItem2Change}
+            >
+              <MenuItem value={0}>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {allItems.map((item) => (
+                <MenuItem
+                  value={item.id}
+                  key={item.id}
+                  onClick={() => setFooterItem2(item)}
+                >{`${item.id}. ${item.maker}`}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
         <Box sx={{ flex: "2" }}></Box>
-        <Box>
-          <IconButton>
-            <PlayArrowIcon />
-          </IconButton>
-        </Box>
       </Toolbar>
     </AppBar>
   );

@@ -1,4 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
+import useAllItems from "@/hooks/useAllItems";
+import useSelectItem from "@/hooks/useSelectItem";
+import { itemsState } from "@/components/atoms/recoil/items-state";
+import { allItemsState } from "@/components/atoms/recoil/allItems-state";
 import { Box, Grid, IconButton, Modal, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, db } from "@/components/firebase/firebase";
@@ -14,9 +20,6 @@ import {
   where,
   doc,
 } from "firebase/firestore";
-import { useRouter } from "next/router";
-import useAllItems from "@/hooks/useAllItems";
-import useSelectItem from "@/hooks/useSelectItem";
 
 import { Item } from "@/types/Item";
 import Footer from "@/components/organisms/layout/Footer";
@@ -34,19 +37,22 @@ const style = {
 };
 
 const AllItems = () => {
+  const [items, setItems] = useRecoilState<Item[]>(itemsState);
+  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
   const [currentUserUid, setCurrentUserUid] = useState("");
   const [open, setOpen] = useState(false);
   const {
     onSelectItem,
     selectedItem,
   }: { onSelectItem: any; selectedItem: Item | null } = useSelectItem();
-  const { getItems, items, setItems, loading } = useAllItems();
+  const { getAllItems, loading, setLoading } = useAllItems();
   const router = useRouter();
 
   const itemsRef = collection(db, "items");
 
   useEffect(() => {
-    getItems();
+    getAllItems();
+    setItems(allItems);
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setCurrentUserUid(currentUser.uid);
@@ -116,7 +122,7 @@ const AllItems = () => {
                 （ここに説明のデータ追加してもいいかも）
               </Typography>
               <Graph gain={selectedItem?.gain} />
-              <div style={{ textAlign: "right" }}>
+              <div style={{ textAlign: "right", marginTop: "20px" }}>
                 <IconButton sx={{ color: "red" }} onClick={() => deleteItem()}>
                   <DeleteIcon fontSize="inherit" />
                 </IconButton>
