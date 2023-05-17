@@ -4,19 +4,18 @@ import { useRecoilState } from "recoil";
 import { itemsState } from "@/components/atoms/recoil/items-state";
 import { signOut } from "firebase/auth";
 import { auth } from "@/components/firebase/firebase";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
   Autocomplete,
   Box,
   Button,
   FormControl,
-  IconButton,
   TextField,
   Toolbar,
 } from "@mui/material";
 import { Item } from "@/types/Item";
 import { allItemsState } from "@/components/atoms/recoil/allItems-state";
+import MenuBar from "@/components/atoms/button/MenuBar";
 
 const makers = [
   "---All---",
@@ -83,16 +82,8 @@ const Header = () => {
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "green" }}>
       <Toolbar sx={{ display: "flex" }}>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ flex: "0.2", mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <p style={{ flex: "1" }}>{user?.displayName || user?.email}</p>
+        <MenuBar />
+        <p style={{ flex: "1.15" }}>{user?.displayName || user?.email}</p>
         <FormControl>
           <Autocomplete
             value={value}
