@@ -151,9 +151,7 @@ const Footer = () => {
                 <MenuItem
                   value={item.id}
                   key={item.id}
-                  onClick={() => {
-                    setFooterItem1(item);
-                  }}
+                  onClick={() => setFooterItem1(item)}
                 >{`${item.id}. ${item.maker}`}</MenuItem>
               ))}
             </Select>
@@ -164,7 +162,9 @@ const Footer = () => {
         </IconButton>
         <Box sx={{ minWidth: 200, flex: "1" }}>
           <FormControl fullWidth>
-            <InputLabel sx={{ fontFamily: "bold" }}>Item2(Target)</InputLabel>
+            <InputLabel sx={{ fontFamily: "bold", m: "10px" }}>
+              Item2(Target)
+            </InputLabel>
             <Select
               value={footerItem2 ? footerItem2.id : 0}
               label="Item2"
