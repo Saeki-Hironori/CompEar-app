@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
 } from "@mui/material";
 import StartIcon from "@mui/icons-material/Start";
 import { Item } from "@/types/Item";
@@ -35,10 +36,6 @@ const Footer = () => {
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
 
   const [open, setOpen] = useState(false);
-  const [compareGain, setCompareGain] = useState<number[]>([]);
-
-  const [item1, setItem1] = useState<any>(0);
-  const [item2, setItem2] = useState<number>(0);
 
   const handleItem1Change = (e: any) => {
     if (e.target.value === 0) {
@@ -53,14 +50,6 @@ const Footer = () => {
   };
 
   const handleClickStart = () => {
-    const result: number[] = [];
-    for (let i = 0; i < footerItem1.gain.length; i++) {
-      result.push(footerItem2.gain[i] - footerItem1.gain[i]);
-    }
-    const calculationGain = result.map((num) => {
-      return Math.round(num * 100) / 100;
-    });
-    setCompareGain(calculationGain);
     setOpen(true);
   };
 
@@ -70,7 +59,7 @@ const Footer = () => {
         <Toolbar sx={{ display: "flex" }}>
           <AddItem />
           <Box sx={{ flex: "1" }}></Box>
-          <Box sx={{ minWidth: 200, flex: "1" }}>
+          <Box sx={{ minWidth: 200, flex: "1", mr: "20px" }}>
             <FormControl fullWidth>
               <InputLabel sx={{ fontFamily: "bold" }}>Item1(Using)</InputLabel>
               <Select
@@ -94,7 +83,7 @@ const Footer = () => {
           <IconButton onClick={handleClickStart} size={"large"}>
             <StartIcon sx={{ fontSize: "48px" }} />
           </IconButton>
-          <Box sx={{ minWidth: 200, flex: "1" }}>
+          <Box sx={{ minWidth: 200, flex: "1", ml: "20px" }}>
             <FormControl fullWidth>
               <InputLabel sx={{ fontFamily: "bold" }}>Item2(Target)</InputLabel>
               <Select
@@ -118,11 +107,7 @@ const Footer = () => {
           <Box sx={{ flex: "2" }}></Box>
         </Toolbar>
       </AppBar>
-      <CompareResultModal
-        open={open}
-        setOpen={setOpen}
-        compareGain={compareGain}
-      />
+      <CompareResultModal open={open} setOpen={setOpen} />
     </>
   );
 };

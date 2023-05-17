@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { itemsState } from "@/components/atoms/recoil/items-state";
@@ -16,7 +16,6 @@ import {
   Toolbar,
 } from "@mui/material";
 import { Item } from "@/types/Item";
-import useAllItems from "@/hooks/useAllItems";
 import { allItemsState } from "@/components/atoms/recoil/allItems-state";
 
 const makers = [
@@ -60,8 +59,13 @@ const Header = () => {
       // console.log(searchedItems);
       setItems(searchedItems);
     }
-    setValue(null);
-    setInputValue("");
+  };
+
+  const handleOnChange = (newValue: string | null) => {
+    console.log(newValue);
+    if (newValue !== null) {
+      searchMaker(newValue);
+    }
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,18 +97,17 @@ const Header = () => {
           <Autocomplete
             value={value}
             onChange={(event: any, newValue) => {
-              // console.log(newValue);
               setValue(newValue);
+              handleOnChange(newValue);
             }}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
-              // console.log(newInputValue);
               setInputValue(newInputValue);
             }}
             onKeyDown={handleInputKeyDown}
             options={makers}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="All" />}
+            renderInput={(params) => <TextField {...params} label="Sort" />}
           />
         </FormControl>
         <Box sx={{ flex: "1" }}></Box>

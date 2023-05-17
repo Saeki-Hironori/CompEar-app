@@ -8,7 +8,6 @@ import { Box, Modal, Typography } from "@mui/material";
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  compareGain: number[];
 };
 
 const modalStyle = {
@@ -24,10 +23,18 @@ const modalStyle = {
 };
 
 const CompareResultModal = (props: Props) => {
-  const { open, setOpen, compareGain } = props;
+  const { open, setOpen } = props;
 
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+
+  const result: number[] = [];
+  for (let i = 0; i < footerItem1.gain.length; i++) {
+    result.push(footerItem2.gain[i] - footerItem1.gain[i]);
+  }
+  const calculationGain = result.map((num) => {
+    return Math.round(num * 100) / 100;
+  });
 
   const handleClose = () => {
     setOpen(false);
@@ -48,7 +55,7 @@ const CompareResultModal = (props: Props) => {
           （ここに説明追加してもいいかも）
         </Typography>
         <CompareGraph
-          compareGain={compareGain}
+          compareGain={calculationGain}
           item1Gain={footerItem1.gain}
           item2Gain={footerItem2.gain}
         />

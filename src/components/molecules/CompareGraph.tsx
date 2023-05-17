@@ -32,9 +32,9 @@ const freq = [
 ];
 
 type Props = {
-  compareGain: number[] | undefined;
-  item1Gain: number[] | undefined;
-  item2Gain: number[] | undefined;
+  compareGain: number[];
+  item1Gain: number[];
+  item2Gain: number[];
 };
 
 const Graph = (props: Props) => {
