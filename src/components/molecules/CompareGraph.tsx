@@ -5,24 +5,30 @@ import {
   LinearScale,
   LogarithmicScale,
   PointElement,
-  ChartOptions,
-  ChartData,
+  BarElement,
   LineElement,
   Title,
   Tooltip,
   Legend,
+  LineController,
+  BarController,
+  ChartData,
+  ChartOptions,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 
 ChartJS.register(
-  CategoryScale,
   LinearScale,
+  CategoryScale,
+  BarElement,
   PointElement,
   LineElement,
   LogarithmicScale,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  LineController,
+  BarController
 );
 
 const freq = [
@@ -37,10 +43,10 @@ type Props = {
   item2Gain: number[];
 };
 
-const Graph = (props: Props) => {
+const CompareGraph = (props: Props) => {
   const { compareGain, item1Gain, item2Gain } = props;
 
-  const options: ChartOptions<"line"> = {
+  const options: ChartOptions<"bar" | "line"> = {
     maintainAspectRatio: true,
     responsive: true,
     plugins: {
@@ -66,22 +72,25 @@ const Graph = (props: Props) => {
   };
 
   const labels = freq;
-  const graphData: ChartData<"line"> = {
+  const graphData: ChartData<"bar" | "line"> = {
     labels,
     datasets: [
       {
+        type: "line" as const,
         label: "Item1",
         data: item1Gain!,
         borderColor: "rgb(0, 250, 0)",
         backgroundColor: "rgba(0, 200, 0, 0.5)",
       },
       {
+        type: "line" as const,
         label: "Item2",
         data: item2Gain!,
         borderColor: "rgb(250,0,0)",
         backgroundColor: "rgba(200, 0, 0, 0.5)",
       },
       {
+        type: "bar" as const,
         label: "差分",
         data: compareGain!,
         borderColor: "rgb(0, 0, 250)",
@@ -93,10 +102,10 @@ const Graph = (props: Props) => {
   return (
     <>
       <div style={{ width: "full" }}>
-        <Line data={graphData} options={options} />
+        <Chart data={graphData} options={options} />
       </div>
     </>
   );
 };
 
-export default Graph;
+export default CompareGraph;

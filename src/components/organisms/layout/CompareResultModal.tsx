@@ -52,7 +52,7 @@ const CompareResultModal = (props: Props) => {
           {`${footerItem1.id}. ${footerItem1.maker} ⇒ ${footerItem2.id}. ${footerItem2.maker}`}
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          （ここに説明追加してもいいかも）
+          Item1 に 差分データ を加えると Item2 の特性になります。
         </Typography>
         <CompareGraph
           compareGain={calculationGain}
