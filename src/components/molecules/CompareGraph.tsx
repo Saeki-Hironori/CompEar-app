@@ -33,10 +33,12 @@ const freq = [
 
 type Props = {
   compareGain: number[] | undefined;
+  item1Gain: number[] | undefined;
+  item2Gain: number[] | undefined;
 };
 
 const Graph = (props: Props) => {
-  const { compareGain } = props;
+  const { compareGain, item1Gain, item2Gain } = props;
 
   const options: ChartOptions<"line"> = {
     maintainAspectRatio: true,
@@ -68,10 +70,22 @@ const Graph = (props: Props) => {
     labels,
     datasets: [
       {
-        label: "データ",
-        data: compareGain!,
+        label: "Item1",
+        data: item1Gain!,
         borderColor: "rgb(0, 250, 0)",
         backgroundColor: "rgba(0, 200, 0, 0.5)",
+      },
+      {
+        label: "Item2",
+        data: item2Gain!,
+        borderColor: "rgb(250,0,0)",
+        backgroundColor: "rgba(200, 0, 0, 0.5)",
+      },
+      {
+        label: "差分",
+        data: compareGain!,
+        borderColor: "rgb(0, 0, 250)",
+        backgroundColor: "rgba(0, 0, 200, 0.5)",
       },
     ],
   };

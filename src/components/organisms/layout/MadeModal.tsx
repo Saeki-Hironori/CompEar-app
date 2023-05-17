@@ -15,13 +15,24 @@ import { db } from "@/components/firebase/firebase";
 import { Box, IconButton, Modal, Typography, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Item } from "@/types/Item";
-import { modalStyle } from "@/styles/modalStyle";
 
 type Props = {
   gain: number[] | undefined;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   footerItem: Item | null;
+};
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "800px",
+  backgroundColor: "white",
+  border: "2px solid rgb(0, 0, 0)",
+  padding: "32px",
+  textAlign: "center",
 };
 
 const MadeModal = (props: Props) => {

@@ -1,32 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { itemsState } from "@/components/atoms/recoil/items-state";
 import { useRouter } from "next/router";
 import useAllItems from "@/hooks/useAllItems";
 import useSelectItem from "@/hooks/useSelectItem";
-import { itemsState } from "@/components/atoms/recoil/items-state";
-import { Grid } from "@mui/material";
-import { auth, db } from "@/components/firebase/firebase";
-import Header from "@/components/organisms/layout/Header";
-import ItemCard from "@/components/organisms/item/ItemCard";
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  deleteDoc,
-  getDocs,
-  query,
-  where,
-  doc,
-} from "firebase/firestore";
-import { Item } from "@/types/Item";
+import { auth } from "@/components/firebase/firebase";
+import ItemCard from "@/components/organisms/item/ItemCard";
+import Header from "@/components/organisms/layout/Header";
 import Footer from "@/components/organisms/layout/Footer";
 import MadeModal from "@/components/organisms/layout/MadeModal";
-import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
-import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
+import { Grid } from "@mui/material";
+import { Item } from "@/types/Item";
 
 const AllItems = () => {
   const [items, setItems] = useRecoilState<Item[]>(itemsState);
-  const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
-  const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
   const [currentUserUid, setCurrentUserUid] = useState("");
   const [open, setOpen] = useState(false);
   const {
@@ -35,8 +23,6 @@ const AllItems = () => {
   }: { onSelectItem: any; selectedItem: Item | null } = useSelectItem();
   const { getAllItems, loading, setLoading } = useAllItems();
   const router = useRouter();
-
-  const itemsRef = collection(db, "items");
 
   useEffect(() => {
     getAllItems();
