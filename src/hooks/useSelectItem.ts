@@ -13,7 +13,7 @@ const useSelectItem = () => {
   const onSelectItem = useCallback((props: Props) => {
     const { id, items } = props;
     const targetItem = items.find((item) => item.id === id);
-    setSelectedItem(targetItem!);
+    targetItem && setSelectedItem(targetItem);
   }, []);
 
   return { onSelectItem, selectedItem };

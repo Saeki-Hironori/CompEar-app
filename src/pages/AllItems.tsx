@@ -4,19 +4,10 @@ import { useRouter } from "next/router";
 import useAllItems from "@/hooks/useAllItems";
 import useSelectItem from "@/hooks/useSelectItem";
 import { itemsState } from "@/components/atoms/recoil/items-state";
-import {
-  Box,
-  Grid,
-  IconButton,
-  Modal,
-  Typography,
-  Button,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Grid } from "@mui/material";
 import { auth, db } from "@/components/firebase/firebase";
 import Header from "@/components/organisms/layout/Header";
 import ItemCard from "@/components/organisms/item/ItemCard";
-import Graph from "@/components/molecules/Graph";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
@@ -31,18 +22,6 @@ import Footer from "@/components/organisms/layout/Footer";
 import MadeModal from "@/components/organisms/layout/MadeModal";
 import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
 import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "800px",
-  backgroundColor: "white",
-  border: "2px solid rgb(0, 0, 0)",
-  padding: "32px",
-  textAlign: "center",
-};
 
 const AllItems = () => {
   const [items, setItems] = useRecoilState<Item[]>(itemsState);
@@ -70,15 +49,6 @@ const AllItems = () => {
     });
   }, []);
 
-  const deleteItem = async () => {
-    const q = query(itemsRef, where("id", "==", selectedItem?.id));
-    const deleteData = await getDocs(q);
-    deleteData.forEach((data) => {
-      console.log(data.id);
-      deleteDoc(doc(db, "items", data.id));
-    });
-  };
-
   const onClickItem = useCallback(
     (id: number) => {
       onSelectItem({ id, items });
@@ -86,17 +56,6 @@ const AllItems = () => {
     },
     [open, items, onSelectItem]
   );
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSetItem1Button = () => {
-    setFooterItem1(selectedItem!);
-  };
-  const handleSetItem2Button = () => {
-    setFooterItem2(selectedItem!);
-  };
 
   return (
     <>
@@ -123,7 +82,12 @@ const AllItems = () => {
               </Grid>
             ))}
           </Grid>
-          <MadeModal gain={selectedItem?.gain} open={open} setOpen={setOpen} />
+          <MadeModal
+            gain={selectedItem?.gain}
+            open={open}
+            setOpen={setOpen}
+            footerItem={selectedItem}
+          />
           <Footer />
         </>
       ) : (

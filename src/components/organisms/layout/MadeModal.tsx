@@ -10,7 +10,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import useSelectItem from "@/hooks/useSelectItem";
 import Graph from "@/components/molecules/Graph";
 import { db } from "@/components/firebase/firebase";
 import { Box, IconButton, Modal, Typography, Button } from "@mui/material";
@@ -22,14 +21,14 @@ type Props = {
   gain: number[] | undefined;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  footerItem: Item | null;
 };
 
 const MadeModal = (props: Props) => {
-  const { gain, open, setOpen } = props;
+  const { gain, open, setOpen, footerItem } = props;
 
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
-  const { selectedItem }: { selectedItem: Item | null } = useSelectItem();
 
   const itemsRef = collection(db, "items");
 
@@ -38,14 +37,18 @@ const MadeModal = (props: Props) => {
   };
 
   const handleSetItem1Button = () => {
-    setFooterItem1(selectedItem!);
+    console.log("↓ Set to Item1 ↓");
+    console.log(footerItem);
+    setFooterItem1(footerItem!);
   };
   const handleSetItem2Button = () => {
-    setFooterItem2(selectedItem!);
+    console.log("↓ Set to Item1 ↓");
+    console.log(footerItem);
+    setFooterItem2(footerItem!);
   };
 
   const deleteItem = async () => {
-    const q = query(itemsRef, where("id", "==", selectedItem?.id));
+    const q = query(itemsRef, where("id", "==", footerItem?.id));
     const deleteData = await getDocs(q);
     deleteData.forEach((data) => {
       console.log(data.id);
@@ -62,7 +65,7 @@ const MadeModal = (props: Props) => {
     >
       <Box sx={modalStyle}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          {`${selectedItem?.id}. ${selectedItem?.maker}`}
+          {`${footerItem?.id}. ${footerItem?.maker}`}
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           （ここに説明追加してもいいかも）

@@ -48,17 +48,16 @@ const makers = [
   "final",
 ];
 
+const itemsRef = collection(db, "items");
+const defaultValue = { id: 0, maker: "NONE", gain: [0] };
+
 const Footer = () => {
   const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
-  const { selectedItem }: { selectedItem: Item | null } = useSelectItem();
 
   const [item1, setItem1] = useState<any>(0);
   const [item2, setItem2] = useState<number>(0);
-
-  const itemsRef = collection(db, "items");
-  const defaultValue = { id: 0, maker: "NONE", gain: [0] };
 
   const addItem = async () => {
     const randomGain = originGain.map((value) => value + Math.random() * 4 - 2);
@@ -141,7 +140,7 @@ const Footer = () => {
           <FormControl fullWidth>
             <InputLabel sx={{ fontFamily: "bold" }}>Item1(Using)</InputLabel>
             <Select
-              value={footerItem1?.id}
+              value={footerItem1 ? footerItem1.id : 0}
               label="Item1"
               onChange={handleItem1Change}
             >
@@ -167,7 +166,7 @@ const Footer = () => {
           <FormControl fullWidth>
             <InputLabel sx={{ fontFamily: "bold" }}>Item2(Target)</InputLabel>
             <Select
-              value={footerItem2?.id}
+              value={footerItem2 ? footerItem2.id : 0}
               label="Item2"
               onChange={handleItem2Change}
             >
