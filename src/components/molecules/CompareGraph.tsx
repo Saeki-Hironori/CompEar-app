@@ -102,7 +102,7 @@ const CompareGraph = (props: Props) => {
   return (
     <>
       <div style={{ width: "full" }}>
-        <Chart data={graphData} options={options} />
+        <Chart type="bar" data={graphData} options={options} />
       </div>
     </>
   );
