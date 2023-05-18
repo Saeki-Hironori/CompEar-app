@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { itemsState } from "@/components/atoms/recoil/items-state";
+import { itemsState } from "../../../../lib/recoil/items_state";
 import { signOut } from "firebase/auth";
-import { auth } from "@/components/firebase/firebase";
+import { auth } from "../../../../lib/firebase/firebase";
 import {
   AppBar,
   Autocomplete,
@@ -14,7 +14,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { Item } from "@/types/Item";
-import { allItemsState } from "@/components/atoms/recoil/allItems-state";
+import { allItemsState } from "../../../../lib/recoil/allItems_state";
 import MenuBar from "@/components/atoms/button/MenuBar";
 
 const makers = [
@@ -80,7 +80,11 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "green" }}>
+    <AppBar
+      component={"header"}
+      position="sticky"
+      sx={{ backgroundColor: "green" }}
+    >
       <Toolbar sx={{ display: "flex" }}>
         <MenuBar />
         <p style={{ flex: "1.15" }}>{user?.displayName || user?.email}</p>

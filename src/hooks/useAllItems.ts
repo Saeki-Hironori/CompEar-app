@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
-import { allItemsState } from "@/components/atoms/recoil/allItems-state";
+import { allItemsState } from "../../lib/recoil/allItems_state";
 import { Item } from "../types/Item";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/components/firebase/firebase";
-import { itemsState } from "@/components/atoms/recoil/items-state";
+import { db } from "../../lib/firebase/firebase";
+import { itemsState } from "../../lib/recoil/items_state";
 
 const useAllItems = () => {
   const [loading, setLoading] = useState(true);

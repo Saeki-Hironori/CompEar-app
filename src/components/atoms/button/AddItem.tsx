@@ -1,5 +1,5 @@
 import React from "react";
-import { db } from "@/components/firebase/firebase";
+import { db } from "../../../../lib/firebase/firebase";
 import {
   addDoc,
   collection,

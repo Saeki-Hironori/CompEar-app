@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { itemsState } from "@/components/atoms/recoil/items-state";
+import { itemsState } from "../../lib/recoil/items_state";
 import { useRouter } from "next/router";
 import useAllItems from "@/hooks/useAllItems";
 import useSelectItem from "@/hooks/useSelectItem";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/components/firebase/firebase";
+import { auth } from "../../lib/firebase/firebase";
 import ItemCard from "@/components/organisms/item/ItemCard";
 import Header from "@/components/organisms/layout/Header";
 import Footer from "@/components/organisms/layout/Footer";

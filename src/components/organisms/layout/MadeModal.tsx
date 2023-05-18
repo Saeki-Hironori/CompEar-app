@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
-import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
+import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
+import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
 import {
   collection,
   deleteDoc,
@@ -11,7 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import Graph from "@/components/molecules/Graph";
-import { db } from "@/components/firebase/firebase";
+import { db } from "../../../../lib/firebase/firebase";
 import { Box, IconButton, Modal, Typography, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Item } from "@/types/Item";

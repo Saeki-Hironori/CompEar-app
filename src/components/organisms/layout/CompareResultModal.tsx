@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
-import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
+import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
+import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
 import CompareGraph from "@/components/molecules/CompareGraph";
 import { Box, Modal, Typography } from "@mui/material";
 

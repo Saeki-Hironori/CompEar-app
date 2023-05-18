@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { allItemsState } from "@/components/atoms/recoil/allItems-state";
-import { footerItem1State } from "@/components/atoms/recoil/footerItem1-state";
-import { footerItem2State } from "@/components/atoms/recoil/footerItem2-state";
+import { allItemsState } from "../../../../lib/recoil/allItems_state";
+import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
+import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
 import {
   AppBar,
   Toolbar,
@@ -12,7 +12,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  TextField,
 } from "@mui/material";
 import StartIcon from "@mui/icons-material/Start";
 import { Item } from "@/types/Item";
@@ -55,7 +54,7 @@ const Footer = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={AppBarStyle}>
+      <AppBar component={"footer"} position="sticky" sx={AppBarStyle}>
         <Toolbar sx={{ display: "flex" }}>
           <AddItem />
           <Box sx={{ flex: "1" }}></Box>

@@ -5,7 +5,7 @@ import {
   onAuthStateChanged,
   signInWithRedirect,
 } from "firebase/auth";
-import { auth, provider } from "@/components/firebase/firebase";
+import { auth, provider } from "../../lib/firebase/firebase";
 import {
   Avatar,
   Button,

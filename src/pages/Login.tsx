@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/router";
 import InputEmail from "@/components/atoms/button/InputEmail";
 import InputPassword from "@/components/atoms/button/InputPassword";
-import { auth, provider } from "@/components/firebase/firebase";
+import { auth, provider } from "../../lib/firebase/firebase";
 
 const Login = () => {
   const [email, setEmail] = useState("");
