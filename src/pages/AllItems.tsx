@@ -12,6 +12,7 @@ import Footer from "@/components/organisms/layout/Footer";
 import MadeModal from "@/components/organisms/layout/MadeModal";
 import { Grid } from "@mui/material";
 import { Item } from "@/types/Item";
+import Visualizer from "@/components/organisms/layout/Visualizer";
 
 const AllItems = () => {
   const [items, setItems] = useRecoilState<Item[]>(itemsState);
@@ -68,6 +69,7 @@ const AllItems = () => {
               </Grid>
             ))}
           </Grid>
+          <Visualizer />
           <MadeModal
             gain={selectedItem?.gain}
             open={open}
