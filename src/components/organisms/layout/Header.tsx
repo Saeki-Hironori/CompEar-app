@@ -61,7 +61,7 @@ const Header = () => {
   };
 
   const handleOnChange = (newValue: string | null) => {
-    console.log(newValue);
+    // console.log(newValue);
     if (newValue !== null) {
       searchMaker(newValue);
     }
@@ -71,7 +71,7 @@ const Header = () => {
     if (e.key !== "Enter") return;
     e.preventDefault();
     if (value) {
-      // console.log(`Valueは${value}`);
+      console.log(`Valueは${value}`);
       searchMaker(value);
     } else {
       // console.log(`inputValueは${inputValue}`);

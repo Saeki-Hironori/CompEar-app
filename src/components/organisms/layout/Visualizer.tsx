@@ -95,6 +95,8 @@ const Visualizer = () => {
     setIsPlaySound(true);
   };
 
+  // 一時停止機能つけたい(suspend/resume)、でもstop/startと競合するみたいなので注意。
+
   return (
     <>
       <canvas
