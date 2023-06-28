@@ -13,6 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { FREQ } from "../../../lib/Constant";
 
 ChartJS.register(
   CategoryScale,
@@ -24,12 +25,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const freq = [
-  20, 25, 32, 40, 50, 63, 79, 100, 126, 158, 200, 251, 316, 398, 501, 631, 794,
-  1000, 1259, 1585, 1995, 2512, 3162, 3981, 5012, 6310, 7943, 10000, 12589,
-  15849, 19953,
-];
 
 type Props = {
   gain: number[] | undefined;
@@ -63,7 +58,7 @@ const Graph = (props: Props) => {
     },
   };
 
-  const labels = freq;
+  const labels = FREQ;
   const graphData: ChartData<"line"> = {
     labels,
     datasets: [

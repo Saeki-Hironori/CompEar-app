@@ -10,7 +10,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { Button } from "@mui/material";
-import { originGain, makers } from "../../../../lib/constant";
+import { originGain, makers } from "../../../../lib/Constant";
 
 const itemsRef = collection(db, "items");
 
