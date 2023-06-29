@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
 import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
 import CompareGraph from "@/components/molecules/CompareGraph";
@@ -25,8 +25,8 @@ const modalStyle = {
 const CompareResultModal = (props: Props) => {
   const { open, setOpen } = props;
 
-  const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
-  const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+  const footerItem1 = useRecoilValue(footerItem1State);
+  const footerItem2 = useRecoilValue(footerItem2State);
 
   const result: number[] = [];
   for (let i = 0; i < footerItem1.gain.length; i++) {

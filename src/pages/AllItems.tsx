@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { itemsState } from "../../lib/recoil/items_state";
 import { useRouter } from "next/router";
 import useAllItems from "@/hooks/useAllItems";
@@ -15,14 +15,14 @@ import { Item } from "@/types/Item";
 import Visualizer from "@/components/organisms/layout/Visualizer";
 
 const AllItems = () => {
-  const [items, setItems] = useRecoilState<Item[]>(itemsState);
+  const items = useRecoilValue<Item[]>(itemsState);
   const [currentUserUid, setCurrentUserUid] = useState("");
   const [open, setOpen] = useState(false);
   const {
     onSelectItem,
     selectedItem,
   }: { onSelectItem: any; selectedItem: Item | null } = useSelectItem();
-  const { getAllItems, loading, setLoading } = useAllItems();
+  const { getAllItems } = useAllItems();
   const router = useRouter();
 
   useEffect(() => {

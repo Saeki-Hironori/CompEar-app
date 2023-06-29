@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { allItemsState } from "../../lib/recoil/allItems_state";
 import { Item } from "../types/Item";
 import { collection, getDocs } from "firebase/firestore";
@@ -8,8 +8,8 @@ import { itemsState } from "../../lib/recoil/items_state";
 
 const useAllItems = () => {
   const [loading, setLoading] = useState(true);
-  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
-  const [items, setItems] = useRecoilState<Item[]>(itemsState);
+  const setAllItems = useSetRecoilState<Item[]>(allItemsState);
+  const setItems = useSetRecoilState<Item[]>(itemsState);
 
   const itemsRef = collection(db, "items");
 

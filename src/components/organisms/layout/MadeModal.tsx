@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
 import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
 import {
@@ -38,8 +38,8 @@ const modalStyle = {
 const MadeModal = (props: Props) => {
   const { gain, open, setOpen, footerItem } = props;
 
-  const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
-  const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+  const setFooterItem1 = useSetRecoilState(footerItem1State);
+  const setFooterItem2 = useSetRecoilState(footerItem2State);
 
   const itemsRef = collection(db, "items");
 

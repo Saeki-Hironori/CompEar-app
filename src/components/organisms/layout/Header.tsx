@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { itemsState } from "../../../../lib/recoil/items_state";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../../lib/firebase/firebase";
@@ -31,8 +31,8 @@ const makers = [
 ];
 
 const Header = () => {
-  const [items, setItems] = useRecoilState<Array<Item>>(itemsState);
-  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
+  const setItems = useSetRecoilState<Array<Item>>(itemsState);
+  const allItems = useRecoilValue<Item[]>(allItemsState);
 
   const [value, setValue] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState<string>("");

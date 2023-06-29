@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { allItemsState } from "../../../../lib/recoil/allItems_state";
 import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
 import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
@@ -30,7 +30,7 @@ const AppBarStyle = {
 };
 
 const Footer = () => {
-  const [allItems, setAllItems] = useRecoilState<Item[]>(allItemsState);
+  const allItems = useRecoilValue<Item[]>(allItemsState);
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
 
