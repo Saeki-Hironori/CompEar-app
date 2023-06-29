@@ -13,6 +13,7 @@ import MadeModal from "@/components/organisms/layout/MadeModal";
 import { Grid } from "@mui/material";
 import { Item } from "@/types/Item";
 import Visualizer from "@/components/organisms/layout/Visualizer";
+import AudioBar from "@/components/organisms/layout/AudioBar";
 
 const AllItems = () => {
   const items = useRecoilValue<Item[]>(itemsState);
@@ -70,6 +71,7 @@ const AllItems = () => {
             ))}
           </Grid>
           <Visualizer />
+          <AudioBar />
           <MadeModal
             gain={selectedItem?.gain}
             open={open}

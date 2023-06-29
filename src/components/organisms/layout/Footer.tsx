@@ -125,9 +125,9 @@ const Footer = () => {
           <Link
             href="/Test"
             color="inherit"
-            style={{ color: "white", flex: "2" }}
+            style={{ color: "white", flex: "1" }}
           >
-            Test ▶
+            Test page ▶
           </Link>
         </Toolbar>
       </AppBar>

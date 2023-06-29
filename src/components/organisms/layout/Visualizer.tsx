@@ -3,6 +3,7 @@ import { drawBars } from "../../../../lib/Canvas";
 
 import { AppBar, Box, Button, SelectChangeEvent, Toolbar } from "@mui/material";
 import { LibraryMusic, VideoLibrary } from "@mui/icons-material";
+import AudioBar from "./AudioBar";
 
 const AppBarStyle = {
   top: "auto",
@@ -110,27 +111,18 @@ const Visualizer = () => {
           backgroundColor: "black",
         }}
       ></canvas>
-
-      <AppBar component={"footer"} position="sticky" sx={AppBarStyle}>
-        <Toolbar sx={{ display: "flex" }}>
-          <Button
-            variant="outlined"
-            component="label"
-            startIcon={<LibraryMusic />}
-          >
-            音楽ファイルを選ぶ
-            <input type="file" accept="audio/*" onChange={audioLoad} hidden />
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<VideoLibrary />}
-            disabled={playSoundDisabled}
-            onClick={onPlaySound}
-          >
-            {isStartSound ? "停止" : "再生"}
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Button variant="outlined" component="label" startIcon={<LibraryMusic />}>
+        音楽ファイルを選ぶ
+        <input type="file" accept="audio/*" onChange={audioLoad} hidden />
+      </Button>
+      <Button
+        variant="outlined"
+        startIcon={<VideoLibrary />}
+        disabled={playSoundDisabled}
+        onClick={onPlaySound}
+      >
+        {isStartSound ? "停止" : "再生"}
+      </Button>
     </>
   );
 };
