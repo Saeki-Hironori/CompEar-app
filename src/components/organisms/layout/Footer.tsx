@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { allItemsState } from "../../../../lib/recoil/allItems_state";
 import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
 import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
+import { resultGainState } from "../../../../lib/recoil/resultGain_state";
 import {
   AppBar,
   Toolbar,
@@ -17,6 +18,7 @@ import StartIcon from "@mui/icons-material/Start";
 import { Item } from "@/types/Item";
 import AddItem from "@/components/atoms/button/AddItem";
 import CompareResultModal from "./CompareResultModal";
+import Link from "next/link";
 
 const noDataGain = Array<number>(31).fill(0);
 const defaultValue = { id: 0, maker: "NONE", gain: noDataGain };
@@ -33,6 +35,7 @@ const Footer = () => {
   const allItems = useRecoilValue<Item[]>(allItemsState);
   const [footerItem1, setFooterItem1] = useRecoilState(footerItem1State);
   const [footerItem2, setFooterItem2] = useRecoilState(footerItem2State);
+  const [resultGain, setResultGain] = useRecoilState(resultGainState);
 
   const [open, setOpen] = useState(false);
 
@@ -49,6 +52,15 @@ const Footer = () => {
   };
 
   const handleClickStart = () => {
+    const result: number[] = [];
+    for (let i = 0; i < footerItem1.gain.length; i++) {
+      result.push(footerItem2.gain[i] - footerItem1.gain[i]);
+    }
+    const calculationGain = result.map((num) => {
+      return Math.round(num * 100) / 100;
+    });
+    setResultGain(calculationGain);
+
     setOpen(true);
   };
 
@@ -57,7 +69,9 @@ const Footer = () => {
       <AppBar component={"footer"} position="sticky" sx={AppBarStyle}>
         <Toolbar sx={{ display: "flex" }}>
           <AddItem />
+
           <Box sx={{ flex: "1" }}></Box>
+
           <Box sx={{ minWidth: 200, flex: "1", mr: "20px" }}>
             <FormControl fullWidth>
               <InputLabel sx={{ fontFamily: "bold" }}>Item1(Using)</InputLabel>
@@ -79,9 +93,11 @@ const Footer = () => {
               </Select>
             </FormControl>
           </Box>
+
           <IconButton onClick={handleClickStart} size={"large"}>
             <StartIcon sx={{ fontSize: "48px" }} />
           </IconButton>
+
           <Box sx={{ minWidth: 200, flex: "1", ml: "20px" }}>
             <FormControl fullWidth>
               <InputLabel sx={{ fontFamily: "bold" }}>Item2(Target)</InputLabel>
@@ -103,10 +119,23 @@ const Footer = () => {
               </Select>
             </FormControl>
           </Box>
-          <Box sx={{ flex: "2" }}></Box>
+
+          <Box sx={{ flex: "1" }}></Box>
+
+          <Link
+            href="/Test"
+            color="inherit"
+            style={{ color: "white", flex: "2" }}
+          >
+            Test ▶
+          </Link>
         </Toolbar>
       </AppBar>
-      <CompareResultModal open={open} setOpen={setOpen} />
+      <CompareResultModal
+        open={open}
+        setOpen={setOpen}
+        calculationGain={resultGain}
+      />
     </>
   );
 };

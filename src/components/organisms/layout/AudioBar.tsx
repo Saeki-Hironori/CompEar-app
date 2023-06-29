@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useDropzone } from "react-dropzone";
 import { Button, IconButton } from "@mui/material";
 import { LibraryMusic } from "@mui/icons-material";
@@ -8,9 +8,11 @@ import PauseIcon from "@mui/icons-material/Pause";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import { FREQ } from "../../../../lib/Constant";
+import { resultGainState } from "../../../../lib/recoil/resultGain_state";
 
 const AudioBar = () => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const resultGain = useRecoilValue(resultGainState);
 
   //再描画時もAudioContextは不変が好ましい => useRefで宣言
   const audioCtxRef = useRef<AudioContext>();
@@ -57,17 +59,21 @@ const AudioBar = () => {
       return;
     }
 
-    const sourceNode = await audioCtx.createBufferSource();
+    const sourceNode = audioCtx.createBufferSource();
     sourceNode.buffer = audioBuffer;
     sourceNode.connect(gainNode!);
     gainNode!.connect(biquadFilterNode[0]!);
     for (let i = 0; i < FREQ.length - 1; i++) {
       biquadFilterNode[i]!.type = "peaking";
-      biquadFilterNode[i]!.gain.value = 0;
+      biquadFilterNode[i]!.gain.value = resultGain[i];
       biquadFilterNode[i].connect(biquadFilterNode[i + 1]);
     }
     biquadFilterNode[FREQ.length - 1].type = "peaking";
-    biquadFilterNode[FREQ.length - 1].connect(audioCtx!.destination);
+    biquadFilterNode[FREQ.length - 1].gain.value =
+      resultGain[resultGain.length - 1];
+    biquadFilterNode[FREQ.length - 1].connect(audioCtx.destination);
+
+    console.log(biquadFilterNode);
 
     if (audioCtx.currentTime > 0) {
       audioCtx.resume();
@@ -89,7 +95,9 @@ const AudioBar = () => {
   const handleSkipForwardButtonClick = () => {
     console.log(biquadFilterNode);
   };
-  const handleSkipBackButtonClick = () => {};
+  const handleSkipBackButtonClick = () => {
+    console.log(resultGain);
+  };
 
   const handleVolumeChange = (e: any) => {
     setVolume(e.target.value);

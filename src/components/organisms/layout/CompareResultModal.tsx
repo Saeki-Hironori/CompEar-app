@@ -1,13 +1,15 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
+import React, { useEffect } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { footerItem1State } from "../../../../lib/recoil/footerItem1_state";
 import { footerItem2State } from "../../../../lib/recoil/footerItem2_state";
+import { resultGainState } from "../../../../lib/recoil/resultGain_state";
 import CompareGraph from "@/components/molecules/CompareGraph";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  calculationGain: number[];
 };
 
 const modalStyle = {
@@ -23,18 +25,11 @@ const modalStyle = {
 };
 
 const CompareResultModal = (props: Props) => {
-  const { open, setOpen } = props;
+  const { open, setOpen, calculationGain } = props;
 
   const footerItem1 = useRecoilValue(footerItem1State);
   const footerItem2 = useRecoilValue(footerItem2State);
-
-  const result: number[] = [];
-  for (let i = 0; i < footerItem1.gain.length; i++) {
-    result.push(footerItem2.gain[i] - footerItem1.gain[i]);
-  }
-  const calculationGain = result.map((num) => {
-    return Math.round(num * 100) / 100;
-  });
+  const [resultGain, setResultGain] = useRecoilState(resultGainState);
 
   const handleClose = () => {
     setOpen(false);

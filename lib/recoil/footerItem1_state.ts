@@ -3,5 +3,5 @@ import { atom } from "recoil";
 
 export const footerItem1State = atom<Item>({
   key: "footerItem1State",
-  default: { id: 0, maker: "NONE", gain: [0] },
+  default: { id: 0, maker: "NONE", gain: Array(31).fill(0) },
 });

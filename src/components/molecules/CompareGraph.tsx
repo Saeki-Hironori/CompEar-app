@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { resultGainState } from "../../../lib/recoil/resultGain_state";
 import {
   Chart as ChartJS,
   CategoryScale,

@@ -2933,7 +2933,12 @@ readable-stream@^3.6.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-recoil@^0.7.7:
+recoil-persist@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/recoil-persist/-/recoil-persist-5.0.1.tgz"
+  integrity sha512-1u0BTvL0n0EdDgjyKbSu5tGFaQiMVBKtEKau575vNtCmi9esWeZ4lpUuzPrI8teERr/IkJeOA+Wg5/dzAVDtEg==
+
+recoil@^0.7.2, recoil@^0.7.7:
   version "0.7.7"
   resolved "https://registry.npmjs.org/recoil/-/recoil-0.7.7.tgz"
   integrity sha512-8Og5KPQW9LwC577Vc7Ug2P0vQshkv1y3zG3tSSkWMqkWSwHmE+by06L8JtnGocjW6gcCvfwB3YtrJG6/tWivNQ==
