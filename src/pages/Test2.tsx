@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import AudioBar from "@/components/organisms/layout/AudioBar";
 import { useRecoilValue } from "recoil";
 import { resultGainState } from "../../lib/recoil/resultGain_state";
-import { Button } from "@mui/material";
 import Link from "next/link";
 import Footer from "@/components/organisms/layout/Footer";
+import AudioBar2 from "@/components/organisms/layout/AudioBar2";
 
-const Test = () => {
+const Test2 = () => {
   const resultGain = useRecoilValue(resultGainState);
 
   useEffect(() => {
@@ -18,13 +17,13 @@ const Test = () => {
       <div style={{ height: "calc(100vh - 200px)" }}>
         <div>
           <Link href="/AllItems">◀ 一覧ページへ</Link>
-          <h1>テストページ</h1>
+          <h1>テスト2ページ</h1>
         </div>
       </div>
-      <AudioBar />
+      <AudioBar2 />
       <Footer />
     </>
   );
 };
 
-export default Test;
+export default Test2;

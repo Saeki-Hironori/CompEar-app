@@ -20,10 +20,12 @@ const AppBarStyle = {
   alignItems: "center",
 };
 
-const AudioBar = () => {
+type EmptyObj = {};
+
+const AudioBar2 = () => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const resultGain = useRecoilValue(resultGainState);
-  const audioCtxTest = useRecoilValue(audioCtxTestState);
+  const [audioCtxTest, setAudioCtxTest] = useRecoilState(audioCtxTestState);
 
   //再描画時もAudioContextは不変が好ましい => useRefで宣言
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -41,14 +43,17 @@ const AudioBar = () => {
   const [peaking, setPeaking] = useState(1000);
 
   useEffect(() => {
-    audioCtxRef.current = new AudioContext();
-    setAudioCtx(audioCtxRef.current);
-    setGainNode(audioCtxRef.current.createGain());
-    for (let i = 0; i < FREQ.length; i++) {
-      setBiquadFilterNode((node) => [
-        ...node,
-        audioCtxRef.current!.createBiquadFilter(),
-      ]);
+    if (Object.keys(audioCtxTest).length === 0) {
+      audioCtxRef.current = new AudioContext();
+      setAudioCtxTest(audioCtxRef.current);
+      setAudioCtx(audioCtxRef.current);
+      setGainNode(audioCtxRef.current.createGain());
+      for (let i = 0; i < FREQ.length; i++) {
+        setBiquadFilterNode((node) => [
+          ...node,
+          audioCtxRef.current!.createBiquadFilter(),
+        ]);
+      }
     }
   }, []);
 
@@ -109,6 +114,7 @@ const AudioBar = () => {
 
   const handleSkipForwardButtonClick = () => {
     console.log(audioCtxTest);
+    console.log(typeof audioCtxTest);
   };
   const handleSkipBackButtonClick = () => {
     audioCtx?.close();
@@ -168,4 +174,4 @@ const AudioBar = () => {
   );
 };
 
-export default AudioBar;
+export default AudioBar2;

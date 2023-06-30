@@ -49,12 +49,10 @@ const MadeModal = (props: Props) => {
 
   const handleSetItem1Button = () => {
     console.log("↓ Set to footerItem1 ↓");
-    console.log(footerItem);
     setFooterItem1(footerItem!);
   };
   const handleSetItem2Button = () => {
     console.log("↓ Set to footerItem2 ↓");
-    console.log(footerItem);
     setFooterItem2(footerItem!);
   };
 

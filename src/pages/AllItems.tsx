@@ -14,6 +14,7 @@ import { Grid } from "@mui/material";
 import { Item } from "@/types/Item";
 import Visualizer from "@/components/organisms/layout/Visualizer";
 import AudioBar from "@/components/organisms/layout/AudioBar";
+import Link from "next/link";
 
 const AllItems = () => {
   const items = useRecoilValue<Item[]>(itemsState);
@@ -50,6 +51,18 @@ const AllItems = () => {
       {currentUserUid ? (
         <>
           <Header />
+
+          <div style={{ textAlign: "right" }}>
+            <Link href="/Test" color="inherit" style={{ color: "black" }}>
+              Test page ▶
+            </Link>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <Link href="/Test2" color="inherit" style={{ color: "black" }}>
+              Test2 page ▶
+            </Link>
+          </div>
+
           <Grid
             container
             spacing={2}
@@ -70,15 +83,17 @@ const AllItems = () => {
               </Grid>
             ))}
           </Grid>
+
           <Visualizer />
           <AudioBar />
+          <Footer />
+
           <MadeModal
             gain={selectedItem?.gain}
             open={open}
             setOpen={setOpen}
             footerItem={selectedItem}
           />
-          <Footer />
         </>
       ) : (
         <>

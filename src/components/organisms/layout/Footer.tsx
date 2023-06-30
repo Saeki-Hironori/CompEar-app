@@ -121,14 +121,6 @@ const Footer = () => {
           </Box>
 
           <Box sx={{ flex: "1" }}></Box>
-
-          <Link
-            href="/Test"
-            color="inherit"
-            style={{ color: "white", flex: "1" }}
-          >
-            Test page ▶
-          </Link>
         </Toolbar>
       </AppBar>
       <CompareResultModal
